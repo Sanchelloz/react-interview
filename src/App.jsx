@@ -4,7 +4,6 @@ import { HomePage } from './pages/HomePage';
 import { NotFoundPage } from './pages/NotFoundPage/index.jsx';
 
 function App() {
-    //return <MainLayout />;
     return (
         <BrowserRouter>
             <Routes>

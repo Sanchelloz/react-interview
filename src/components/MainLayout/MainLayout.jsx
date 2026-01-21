@@ -13,7 +13,7 @@ export const MainLayout = () => {
                     <Outlet />
                 </main>
                 <footer className={cls.footer}>
-                    React Question Cards Application | {currentYear} <br />
+                    React Interview Application | {currentYear} <br />
                     by Alex A
                 </footer>
             </div>
