@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { QuestionCardList } from '../../components/QuestionCardList';
 import { Loader } from '../../components/Loader';
 import { useFetch } from '../../hooks/useFetch.js';
+import { SearchInput } from '../../components/SearchInput/index.jsx';
 
 export const HomePage = () => {
     const [questions, setQuestions] = useState([]);
@@ -28,7 +29,9 @@ export const HomePage = () => {
 
     return (
         <>
-            <input type="text" value={searchValue} onChange={onSearchChangeHandler} />
+            <div className={cls.controlsContainer}>
+                <SearchInput value={searchValue} onChange={onSearchChangeHandler} />
+            </div>
 
             {isLoading && <Loader />}
             {error && <p>{error}</p>}
