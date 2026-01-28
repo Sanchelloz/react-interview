@@ -31,6 +31,7 @@ export default defineConfig([
             ...reactHooks.configs.recommended.rules,
             'react/jsx-no-target-blank': 1,
             'react/prop-types': 'warn',
+            'react/display-name': false,
             'no-console': 'warn',
             'prettier/prettier': [
                 'error',
