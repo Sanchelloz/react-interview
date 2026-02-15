@@ -5,14 +5,14 @@ import { QuestionCardList } from '../../components/QuestionCardList';
 import { Loader } from '../../components/Loader';
 import { useFetch } from '../../hooks/useFetch.js';
 import { SearchInput } from '../../components/SearchInput';
-import { Button } from '../../components/Button';
 import { Select } from '../../components/Select';
+import { Pagination } from '../../components/Pagination';
 
 const DEFAULT_PER_PAGE = 10;
 
 export const HomePage = () => {
     const [ searchParams, setSearchParams ] = useState(`?_page=1&_per_page=${ DEFAULT_PER_PAGE }`);
-    const [ questions, setQuestions ] = useState({});
+    const [ questionsData, setQuestionsData ] = useState({});
     const [ searchValue, setSearchValue ] = useState('');
     const [ sortSelectedValue, setSortSelectedValue ] = useState('');
     const [ countSelectedValue, setCountSelectedValue ] = useState('');
@@ -30,33 +30,26 @@ export const HomePage = () => {
         { label: 50, value: 50 },
         { label: 100, value: 100 },
     ];
-    const getActivePageNumber = () => questions.next === null ? questions.last : questions.next - 1;
 
     const cards = useMemo(() => {
-        if (questions?.data) {
+        if (questionsData?.data) {
             if (searchValue.trim()) {
-                return questions.data.filter((q) => q.question.toLowerCase().includes(searchValue.trim().toLowerCase()))
+                return questionsData.data.filter((q) => q.question.toLowerCase().includes(searchValue.trim().toLowerCase()))
             } else {
-                return questions.data;
+                return questionsData.data;
             }
         }
 
         return [];
-    }, [ questions, searchValue ]);
-
-    const pagination = useMemo(() => {
-        const totalCardsCount = questions?.pages || 0;
-
-        return Array(totalCardsCount).fill(0).map((_, i) => i + 1)
-    }, [ questions ]);
+    }, [ questionsData, searchValue ]);
 
     const [ getQuestions, isLoading, error ] = useFetch(async (url) => {
         const response = await fetch(`${ API_URL }/${ url }`);
-        const questions = await response.json();
+        const questionsData = await response.json();
 
-        setQuestions(questions);
+        setQuestionsData(questionsData);
 
-        return questions;
+        return questionsData;
     });
 
     useEffect(() => {
@@ -103,13 +96,7 @@ export const HomePage = () => {
 
             {
                 cards.length === 0 ? <p className={ cls.noCardsInfo }>No Cards...</p> :
-                    pagination.length > 1 && <div className={ cls.paginationContainer } onClick={ paginationHandler }>
-                        {
-                            pagination.map((val) => {
-                                return <Button key={ val } isActive={ val === getActivePageNumber() }>{ val }</Button>
-                            })
-                        }
-                    </div>
+                    <Pagination listData={ questionsData } onClick={ paginationHandler }/>
             }
         </>
     );

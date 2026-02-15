@@ -9,7 +9,7 @@ export const Select = ({ value, onChange, options = [], title = '', id = '' }) =
                 { title.length && <hr/> }
                 {
                     options.map((opt) => {
-                        return <option value={ opt.value }>{ opt.label }</option>
+                        return <option key={ opt.value } value={ opt.value }>{ opt.label }</option>
                     })
                 }
             </select>
