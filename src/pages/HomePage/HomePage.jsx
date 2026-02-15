@@ -4,8 +4,9 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { QuestionCardList } from '../../components/QuestionCardList';
 import { Loader } from '../../components/Loader';
 import { useFetch } from '../../hooks/useFetch.js';
-import { SearchInput } from '../../components/SearchInput/index.jsx';
-import { Button } from '../../components/Button/index.jsx';
+import { SearchInput } from '../../components/SearchInput';
+import { Button } from '../../components/Button';
+import { Select } from '../../components/Select';
 
 const DEFAULT_PER_PAGE = 10;
 
@@ -17,7 +18,18 @@ export const HomePage = () => {
     const [ countSelectedValue, setCountSelectedValue ] = useState('');
 
     const controlsContainerRef = useRef();
-
+    const sortOptions = [
+        { label: 'Level ASC', value: '_sort=level' },
+        { label: 'Level DESC', value: '_sort=-level' },
+        { label: 'Completed ASC', value: '_sort=completed' },
+        { label: 'Completed DESC', value: '_sort=-completed' },
+    ];
+    const countOptions = [
+        { label: 10, value: 10 },
+        { label: 25, value: 25 },
+        { label: 50, value: 50 },
+        { label: 100, value: 100 },
+    ];
     const getActivePageNumber = () => questions.next === null ? questions.last : questions.next - 1;
 
     const cards = useMemo(() => {
@@ -77,25 +89,11 @@ export const HomePage = () => {
             <div className={ cls.controlsContainer } ref={ controlsContainerRef }>
                 <SearchInput value={ searchValue } onChange={ onSearchChangeHandler }/>
 
-                <select value={ sortSelectedValue } onChange={ onSortSelectChangeHandler } className={ cls.select }
-                        name="" id="">
-                    <option disabled>Sort By</option>
-                    <hr/>
-                    <option value="_sort=level">Level ASC</option>
-                    <option value="_sort=-level">Level DESC</option>
-                    <option value="_sort=completed">Completed ASC</option>
-                    <option value="_sort=-completed">Completed DESC</option>
-                </select>
+                <Select value={ sortSelectedValue } onChange={ onSortSelectChangeHandler }
+                        options={ sortOptions } title="Sort By" id='sortSelect' />
 
-                <select value={ countSelectedValue } onChange={ onCountSelectChangeHandler } className={ cls.select }
-                        name="" id="">
-                    <option disabled>Count</option>
-                    <hr/>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
+                <Select value={ countSelectedValue } onChange={ onCountSelectChangeHandler }
+                        options={ countOptions } title="Count" id='countSelecte' />
             </div>
 
             { isLoading && <Loader/> }
